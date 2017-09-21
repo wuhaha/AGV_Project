@@ -11,7 +11,7 @@ int DIR = 8;
 int LEFT = 9;
 int RIGHT = 10;
 
-int spdfct = 1;
+int spdfct = 1000;
 
 int S1 = 5;
 int S2 = 6;
@@ -40,15 +40,15 @@ void setup() {
   digitalWrite(Motor2S, LOW);
   digitalWrite(Motor2D, LOW);
   
-  //Serial.begin(9600);
+  Serial.begin(115200);
 }
 
 void loop() {
   D = digitalRead(DIR);
   L = digitalRead(LEFT);
   R = digitalRead(RIGHT);
-  //spdfct = read_from_serial();
-  choose_spd();
+  read_from_serial();
+  //choose_spd();
   if(D == HIGH){
     Backward(spdfct);
     }
@@ -62,34 +62,50 @@ void loop() {
     Forward(spdfct);
     }
     //Serial.println(analogRead(A0));
-    //Serial.print(spdfct);
+    //Serial.println(spdfct);
 }
 
-void choose_spd(){
-  s1 = digitalRead(S1);
-  s2 = digitalRead(S2);
-  
-  if(s1 == HIGH && s2 == HIGH){
-  spdfct = spdA;
-  }
-  else if(s1 == HIGH && s2 == LOW){
-  spdfct = spdB;
-  }
-  else if(s1 == LOW && s2 == HIGH){
-  spdfct = spdC;
-  }
-  else {
-  spdfct = 1000;
-  }
-}
+//void choose_spdMode(S1, INPUT);
+//  pinMode(S2, INPUT);
+//  
+//  digitalWrite(Motor1S, LOW);
+//  digitalWrite(Motor1D, LOW);
+//  digitalWrite(Motor2S, LOW);
+//  digitalWrite(Motor2D, LOW);
+//  
+//  //Serial.begin(9600);
+//}
 
-int read_from_serial(){
+//void loop() {
+//  D = digitalRead(DIR);
+//  L = digitalRead(LEFT);
+//  R = digitalRead(RIGHT);
+//  spdfct = read_from_serial();
+
+//  s1 = digitalRead(S1);
+//  s2 = digitalRead(S2);
+//  
+//  if(s1 == HIGH && s2 == HIGH){
+//  spdfct = spdA;
+//  }
+//  else if(s1 == HIGH && s2 == LOW){
+//  spdfct = spdB;
+//  }
+//  else if(s1 == LOW && s2 == HIGH){
+//  spdfct = spdC;
+//  }
+//  else {
+//  spdfct = 1000;
+//  }
+//}
+
+void read_from_serial(){
   String spdfctstring;
   if(Serial.available()){
     spdfctstring = Serial.readString();
     spdfct = spdfctstring.toInt();
+    Serial.println(spdfct);
     }
-  return spdfct;
   }
 
 void MotorSpeed(int speedfactor){
