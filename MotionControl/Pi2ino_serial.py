@@ -43,12 +43,12 @@ a = 1
 def main():
 	global a
 	global direction
-	#se = serial.Serial('/dev/ttyS0',9600)
+	se = serial.Serial('/dev/ttyS0',9600,8,'N',1)
       
 	while(a):
 		get()
 		print direction
-		#se.write(direction+'\n')
+		se.write(direction+'\n')
 
 if __name__=='__main__':
         main()
