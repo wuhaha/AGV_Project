@@ -92,6 +92,7 @@
 		{
 			send_pulse();
 			delayMicroseconds(target_dly);
+			pulse--;
 		}
 			
 	}
