@@ -28,32 +28,32 @@
 		{
 		case Forward: 
 		{
-			digitalWrite(R_P, LOW);
-			digitalWrite(L_P, LOW);
+			digitalWrite(R_D, LOW);
+			digitalWrite(L_D, HIGH);
 			break;
 		}
 		case Backward: 
 		{
-			digitalWrite(R_P, HIGH);
-			digitalWrite(L_P, HIGH);
+			digitalWrite(R_D, HIGH);
+			digitalWrite(L_D, LOW);
 			break;
 		}
 		case LeftTurn: 
 		{
-			digitalWrite(R_P, HIGH);
-			digitalWrite(L_P, LOW);
+			digitalWrite(R_D, LOW);
+			digitalWrite(L_D, LOW);
 			break;
 		}
 		case RightTurn: 
 		{
-			digitalWrite(R_P, LOW);
-			digitalWrite(L_P, HIGH);
+			digitalWrite(R_D, HIGH);
+			digitalWrite(L_D, HIGH);
 			break;
 		}
 		default:
 		{
-			digitalWrite(R_P, LOW);
-			digitalWrite(L_P, LOW);
+			digitalWrite(R_D, LOW);
+			digitalWrite(L_D, HIGH);
 		}
 		}
 	}
@@ -77,9 +77,10 @@
 	
 	void Run_Mode::Speed_Control(int pulse, int init_dly, int target_dly)
 	{
-		int AccK, ActualDelay=init_dly;		
-		AccK = (init_dly - target_dly)/pulse;
-		AccK = AccK<0?AccK-1:AccK+1;
+		int AccK, A,ActualDelay=init_dly;
+		AccK = (init_dly - target_dly)<0?-1:1;		
+		A = (init_dly - target_dly)/pulse;
+		AccK = A==0?AccK:A;
 		while(pulse > 0)
 		{
 			send_pulse();
