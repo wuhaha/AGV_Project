@@ -1,6 +1,6 @@
-#include <Robot_Motion_Control.h>
+ #include <Robot_Motion_Control.h>
 
-const int Condition Flag = 4
+const int Condition_Flag = 4;
 
 Motor_Mode motormode;
 
@@ -11,7 +11,7 @@ enum run_modes
   RIGHT_TURN,
   FORWARD,
   BACKWARD  
-} run_modes = MOTOR_IDLE;
+} runmode = MOTOR_IDLE;
 
 int motor_speed = Idle_Delay;
 int motor_steps = 0;
@@ -27,27 +27,27 @@ void setup() {
   Serial.begin(115200);
 
   digitalWrite(Condition_Flag, LOW);
+  
 }
 
 void loop() {
 
   if (runmode == MOTOR_IDLE)
   {
-    while(Serial.avaliable())
-    {
-      ParseSerial();  
-    }  
+      runmode = ParseSerial();
+      STM_mode(runmode);  
+      //Serial.println(runmode);  
   }
 
 }
 
-void STM_mode(run_modes runmode)
+void STM_mode(enum run_modes runmode)
 {
   switch(runmode)
   {
     case MOTOR_IDLE :
     {
-      digitalWrite(Condition_Flag, LOW)
+      digitalWrite(Condition_Flag, LOW);
       break;  
     }
     case FORWARD : 
@@ -72,6 +72,20 @@ void STM_mode(run_modes runmode)
     } 
     default: break;
   }
+  //runmode = MOTOR_IDLE;
+}
+
+run_modes ParseSerial()
+{
+  char picmd[4];
+  unsigned int inbyte = 0;
+  while(Serial.available())
+  {picmd[inbyte] = Serial.read();Serial.println(picmd[inbyte]);inbyte++;}
+  motor_speed = picmd[1];
+  motor_steps = picmd[2];
+  //Serial.println(inbyte);
+  return picmd[0];
+  
 }
 
 
