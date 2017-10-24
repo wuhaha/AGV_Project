@@ -1,0 +1,31 @@
+#######################################
+# Syntax Coloring Map For Bridge
+#######################################
+
+#######################################
+# Class (KEYWORD1)
+#######################################
+
+Motor_Mode	KEYWORD1
+Run_Mode	KEYWORD2	
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+#Motor_Mode
+Turn_Left	KEYWORD2
+Turn_Right	KEYWORD2
+Go_Straight	KEYWORD2
+Go_Backward	KEYWORD2
+set_wheel_mode	KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+R_P	LITERAL1
+R_D	LITERAL1
+L_P	LITERAL1
+L_D	LITERAL1
