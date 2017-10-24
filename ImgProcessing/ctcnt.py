@@ -15,15 +15,16 @@ if circles is not None:
 		cv2.circle(img2, (x, y), r, (0, 255, 0), 4)
 		cv2.rectangle(img2, (x - 5, y - 5), (x + 5, y + 5), (0, 128, 255), -1)
 
-blur = cv2.GaussianBlur(gray, (5,5),0)
+blur = cv2.GaussianBlur(gray, (3,3),0)
 
-thresh = cv2.threshold(blur, 150, 255, cv2.THRESH_BINARY)[1]
+thresh = cv2.threshold(blur, 130, 200, cv2.THRESH_BINARY)[1]
 
 cv2.imwrite('th.jpg',thresh)
 
 cnts = cv2.findContours(thresh.copy(), cv2.RETR_LIST ,cv2.CHAIN_APPROX_SIMPLE)
 
-cnts = cnts[0] if imutils.is_cv2() else cnts[1]
+cnts = cnts[0]
+print len(cnts)
 
 for c in cnts:
 
@@ -35,7 +36,9 @@ for c in cnts:
     		cX, cY = 0, 0
 	
 	cv2.drawContours(img, [c], -1, (0, 255, 0), 2)
-	cv2.circle(img, (cX, cY), 7, (255, 255, 255), -1)
-	cv2.putText(img, str(cX)+str(cY), (cX - 20, cY - 20),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+	cv2.circle(img, (cX, cY), 7, (255, 0, 0), -1)
+	cv2.putText(img, str(cX)+','+str(cY), (cX - 20, cY - 20),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+	print str(cX) + ',' +str(cY)
+	print [c]
 
 cv2.imwrite('a.jpg',img)
