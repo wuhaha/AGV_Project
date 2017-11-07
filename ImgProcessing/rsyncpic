@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cdate=$(date "+%m_%d_%y")
+
+ip=192.168.0.6
+
+mkdir /home/pegatron/AGV_LivePic/$cdate
+
+rsync -avh --ignore-existing --update pi@$ip:~/pipic/$cdate/ /home/pegatron/AGV_LivePic/$cdate/  
