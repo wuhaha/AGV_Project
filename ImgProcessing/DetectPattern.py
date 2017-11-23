@@ -1,107 +1,92 @@
 import cv2
-import imutils
 import numpy as np
 
-class findpattern:
 
-	def __init__(self,captured_img):
-		self.captured_img = captured_img
-		self.indexs = 0
-		self.layers = 5
+class FindPattern(object):
+    def __init__(self, captured_img):
+        self.captured_img = captured_img
+        self.indexs = 0
 
-	def preprocessing:
-		img = cv2.imread(self.captured_img)
-		gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-		#blur = cv2.GaussianBlur(gray, (15,15),0)
-		edged = cv2.Canny(gray, 100, 250)
-		#cv2.imwrite("Edged.jpg", edged)
-		#kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-		closed = cv2.morphologyEx(edged, cv2.MORPH_CLOSE, kernel)
-		#cv2.imwrite("closed.jpg", closed)
-		#thresh = cv2.threshold(blur, 100, 200, cv2.THRESH_BINARY)[1]
-		#cv2.imwrite('th.jpg',thresh)
-		cnts,hier = cv2.findContours(closed.copy(), cv2.RETR_TREE ,cv2.CHAIN_APPROX_SIMPLE)
-		z = zip(cnts,hier[0])
-		self.indexs = len(z) -1
+    # self.layers = 5
 
-	def find_pattern_squares:
-		CrtContours =
+    def preprocessing(self):
+        img = cv2.imread(self.captured_img)
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        # blur = cv2.GaussianBlur(gray, (15,15),0)
+        edged = cv2.Canny(gray, 100, 250)
+        # cv2.imwrite("Edged.jpg", edged)
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+        closed = cv2.morphologyEx(edged, cv2.MORPH_CLOSE, kernel)
+        # cv2.imwrite("closed.jpg", closed)
+        # thresh = cv2.threshold(blur, 100, 200, cv2.THRESH_BINARY)[1]
+        # cv2.imwrite('th.jpg',thresh)
+        cnts, hier = cv2.findContours(closed.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        z = zip(cnts, hier[0])
+        self.indexs = len(z) - 1
+        return z
 
-while(indexs >= 0):
-	c0 = z[indexs][0]
-	h0 = z[indexs][1]
-	indexs -= 1
-	#cv2.drawContours(img, [c0], -1, (0, 255, 0), 4)
-	#cv2.imwrite('b.jpg', img)
-	peri0 = cv2.arcLength(c0, True)
-	approx0 = cv2.approxPolyDP(c0, 0.02 * peri0, True)
-	if len(approx0) >= 4 and h0[2] < 0:
-		#cv2.drawContours(img, [approx0], -1, (255, 255, 0), 2)
-		M0 = cv2.moments(approx0)
-		if int(M0['m00']) != 0:
-			cX0 = int(M0['m10']/M0['m00'])
-			cY0 = int(M0['m01']/M0['m00'])
-		else:
-			cX0 = 0
-			cY0 = 0
-		if h0[3] < 0:
-			continue
-		else:
-			#cv2.drawContours(img, [approx0], -1, (0, 255, 0), 4)
-			index1 = h0[3]
-			c1 = z[index1][0]
-			h1 = z[index1][1]
-			peri1 = cv2.arcLength(c1, True)
-			approx1 = cv2.approxPolyDP(c1, 0.02 * peri1, True)
-			if len(approx1) == 4:
-				M1 = cv2.moments(approx1)
-				cX1 = int(M1['m10']/M1['m00'])
-				cY1 = int(M1['m01']/M1['m00'])	
-				#cv2.drawContours(img, [approx1], -1, (0, 255, 0), 4)
-				if cX0 - cX1 > 5 or cY0 - cY1 > 5 or h1[3] < 0:
-					continue
-				else:
-					index2 = h1[3]	
-					c2 = z[index2][0]
-					h2 = z[index2][1]
-					peri2 = cv2.arcLength(c2, True)
-					approx2 = cv2.approxPolyDP(c2, 0.02 * peri2, True)
-					if len(approx2) >= 4:
-						M2 = cv2.moments(approx2)
-						cX2 = int(M2['m10']/M2['m00'])
-						cY2 = int(M2['m01']/M2['m00'])	
-						#cv2.drawContours(img, [approx2], -1, (0, 255, 0), 4)
-						if cX2 - cX1 > 5 or cY2 - cY1 > 5:
-							continue
-						else:
-							index3 = h2[3]	
-							c3 = z[index3][0]
-							h3 = z[index3][1]
-							peri3 = cv2.arcLength(c3, True)
-							approx3 = cv2.approxPolyDP(c3, 0.02 * peri3, True)
-							if len(approx3) >= 4:
-								M3 = cv2.moments(approx3)
-								cX3 = int(M3['m10']/M3['m00'])
-								cY3 = int(M3['m01']/M3['m00'])	
-								#cv2.drawContours(img, [approx3], -1, (0, 255, 0), 4)
-								if cX3 - cX2 > 5 or cY3 != cY2 > 5:
-									continue
-								else:
-									cX = cX2
-									cY = cY2
-									cv2.drawContours(img, [approx0], -1, (0, 255, 255), 4)
-									cv2.drawContours(img, [approx1], -1, (255, 255, 0), 4)
-									#cv2.drawContours(img, [approx2], -1, (0, 0, 255), 4)
-									#cv2.drawContours(img, [approx3], -1, (0, 255, 0), 4)
-									cv2.imwrite('b.jpg', img)
+    def find_squares(self, zipcontour):
+        c = zipcontour[0]
+        h = zipcontour[1]
+        peri = cv2.arcLength(c, True)
+        approx = cv2.approxPolyDP(c, 0.02 * peri, True)
+        if ((len(approx) >= 4) and (len(approx) <= 8)):
+            rect = cv2.minAreaRect(approx)
+            if h[2] < 0:
+                return True, rect, True, h[3]
+            else:
+                return True, rect, False, h[3]
+        else:
+            return False, 0, False, 0
 
-	#print indexs
-	#cv2.drawContours(img, [c0], -1, (0, 255, 0), 4)
-	#indexs -= 1
-	#peri0 = cv2.arcLength(c0, True)
-	#approx0 = cv2.approxPolyDP(c0, 0.02 * peri0, True)
-	#if len(approx0) == 4 and h0[2] < 0:
-		#print h0[2]
-		#cv2.drawContours(img, [approx0], -1, (0, 255, 0), 4)
-#print str(cX) + ',' + str(cY)
-cv2.imwrite('b.jpg',img)
+    def match_squares(self):
+        zipcnts = self.preprocessing()
+        while (self.indexs >= 0):
+            squarecnt = 0
+            is_square, rect, is_innermost, outer_shape = self.find_squares(zipcnts[self.indexs])
+            if not is_square:
+                continue
+            else:
+                if is_innermost:
+                    centerX0, centerY0 = rect[0]
+                    width0, height0 = rect[1]
+                    angle0 = rect[2]
+                    if width0 - height0 > 5:
+                        continue
+                    centerX = centerX0
+                    centerY = centerY0
+                    angle = angle0
+                    while (squarecnt < 6):
+                        is_square, rect, is_innermost, outer_shape = self.find_squares(zipcnts[outer_shape])
+                        centerX1, centerY1 = rect[0]
+                        width1, height1 = rect[1]
+                        angle1 = rect[2]
+                        if not is_square or centerX1 - centerX0 > 5 or centerY1 - centerY0 > 5:
+                            break
+                        else:
+                            centerX += centerX1
+                            centerY += centerY1
+                            angle += angle1
+                            squarecnt += 1
+            if squarecnt == 6:
+                centerX = int(centerX / 6)
+                centerY = int(centerY / 6)
+                angle = angle / 6
+                return centerX, centerY, angle
+            self.indexs -= 1
+        # cv2.drawContours(img, [c0], -1, (0, 255, 0), 4)
+        # cv2.imwrite('b.jpg', img)
+        # peri = cv2.arcLength(rect, True)
+        # approx = cv2.approxPolyDP(rect, 0.02 * peri, True)
+        # if len(approx) >= 4 and h[2] < 0:
+        # 	# cv2.drawContours(img, [approx0], -1, (255, 255, 0), 2)
+        # 	M = cv2.moments(approx)
+        # 	if int(M['m00']) != 0:
+        # 		cX = int(M['m10'] / M['m00'])
+        # 		cY = int(M['m01'] / M['m00'])
+        # 	else:
+        # 		cX = 0
+        # 		cY = 0
+        # return cX, cY, h[3]
+
+# cv2.imwrite('b.jpg',img)

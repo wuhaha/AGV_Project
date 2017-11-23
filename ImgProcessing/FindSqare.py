@@ -5,7 +5,6 @@ import numpy as np
 def FindSqare(zipcontour):
     c = zipcontour[0]
     h = zipcontour[1]
-    indexs -= 1
     # cv2.drawContours(img, [c0], -1, (0, 255, 0), 4)
     # cv2.imwrite('b.jpg', img)
     peri = cv2.arcLength(c, True)
