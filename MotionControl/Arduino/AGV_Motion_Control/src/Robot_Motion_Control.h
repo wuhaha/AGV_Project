@@ -8,10 +8,14 @@
 #define L_P 3
 #define L_D 13
 
+
 #define AccCoef 10
 
-const int Basic_Delay = 500;
-const int Idle_Delay = Basic_Delay * 2;
+const int Base_Delay = 10;
+const int Idle_Delay = Base_Delay * 2;
+
+#define Left_Wheel_Delay = Idle_Delay
+#define Right_Wheel_Delay = Idle_Delay
 
 enum Wheel_Mode {Forward, Backward, LeftTurn, RightTurn};
 
@@ -31,6 +35,8 @@ class Run_Mode
 {
 	public:	
 	void Speed_Control(int, int, int);	
-	void send_pulse();
+	void send_pulse(int);
+	void Turn(int, int, int);
 };
+
 

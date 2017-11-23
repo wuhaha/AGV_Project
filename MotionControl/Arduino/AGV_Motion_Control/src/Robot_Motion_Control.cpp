@@ -83,7 +83,8 @@
 		AccK = A==0?AccK:A;
 		while(pulse > 0)
 		{
-			send_pulse();
+			send_pulse(R_P);
+			send_pulse(L_P);
 			delayMicroseconds(ActualDelay);
 			ActualDelay -= AccK;
 			pulse--;
@@ -91,21 +92,35 @@
 		}
 		while(pulse > 0)
 		{
-			send_pulse();
+			send_pulse(R_P);
+			send_pulse(L_P);
 			delayMicroseconds(target_dly);
 			pulse--;
 		}
 			
 	}
-	void Run_Mode::send_pulse()
+	void Run_Mode::send_pulse(int wheels)
 	{
-		digitalWrite(R_P, HIGH);
-		digitalWrite(L_P, HIGH);
-		digitalWrite(R_P, LOW);
-		digitalWrite(L_P, LOW);
+		digitalWrite(wheels, HIGH);
+		digitalWrite(wheels, LOW);
 	}
 
-
+	void Run_Mode::Turn(int left_times, int right_times, int totaltimes)
+	{
+		int N;
+		int l_N = left_times;
+		int r_N = right_times;
+		for(N = 1; N < totaltimes +1; N++)
+		{
+			if(N % l_N == 0)
+				{send_pulse(L_P);
+				Serial.println("Left");}
+			if(N % r_N == 0)
+				{send_pulse(R_P);
+				Serial.println("Right");}
+			delayMicroseconds(Base_Delay);
+		}
+	}
 
 float Angle_to_Radius(float agl)
 {
