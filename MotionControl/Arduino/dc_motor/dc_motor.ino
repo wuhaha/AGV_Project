@@ -9,7 +9,7 @@ const int motorLS = 3;
 const int motorRS = 11;
 
 int Spd = 125;
-int Duration = 250;
+int Duration = 100;
 
 
 void setup(){
