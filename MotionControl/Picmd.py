@@ -15,16 +15,16 @@ pi_ser_cmd.writeTimeout = 2
 
 pi_ser_cmd.open()
 
-pi_ser_cmd.write(struct('!B',1))
+pi_ser_cmd.write(struct('!l',1))
 
 pi_ser_cmd.readall()
 
-values = (2,2,1)
+values = (2,2,3)
 
 picmd = ''
 
 for i in values:
-    picmd += struct.pack('!B',i)
+    picmd += struct.pack('!lll',i)
 
 pi_ser_cmd.write(picmd)
 pi_ser_cmd.readall()
