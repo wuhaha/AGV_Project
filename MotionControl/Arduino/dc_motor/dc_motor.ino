@@ -109,6 +109,8 @@ int getSerial() {
   } }
 
   void loop() {
+    spd = getSerial();
+    SetSpeed(spd);
     char a;
     a = read_mode();
     Serial.print(read_mode());
