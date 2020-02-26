@@ -97,10 +97,15 @@ char read_mode() {
 }
 
 int getSerial() {
-  if (Serial.available()) {
-    char serialin;
-    serialin = Serial.read();
-
+  while (Serial.available()) {
+    int inChar = Serial.read();
+    if (isDigit(inChar)) {
+      inString += (char)inChar;
+    }
+    if (inChar == '\n') {
+      inString = "";
+      return(inString.toInt());
+    }
   } }
 
   void loop() {
