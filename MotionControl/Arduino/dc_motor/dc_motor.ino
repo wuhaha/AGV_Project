@@ -12,7 +12,7 @@ const int motorMode1 = 7;
 const int motorMode2 = 8;
 
 int Spd = 125;
-int Duration = 100;
+int Duration = 10000;
 
 
 void setup() {
@@ -54,8 +54,10 @@ void Forward(int spd, int t) {
   digitalWrite(motorL2, LOW);
   digitalWrite(motorR1, HIGH);
   digitalWrite(motorR2, LOW);
+  Serial.print(spd);
   SetSpeed(spd);
   delay(t);
+  Serial.print('a');
 }
 
 void Backward(int spd, int t) {
@@ -64,7 +66,9 @@ void Backward(int spd, int t) {
   digitalWrite(motorR1, LOW);
   digitalWrite(motorR2, HIGH);
   SetSpeed(spd);
+  Serial.print(spd);
   delay(t);
+  Serial.print('a');
 }
 
 void Stop() {
@@ -82,37 +86,45 @@ void SetSpeed(int spd) {
 }
 
 char read_mode() {
-  int mode1, mode2, modea;
-  mode1 = digitalRead(motorMode1) * 2;
-  mode2 = digitalRead(motorMode2);
-  modea = mode1 + mode2;
-  switch (modea)
+  int modeS=0;
+  if (digitalRead(motorMode1) == HIGH)
+    {
+      modeS +=1;
+      }
+  if (digitalRead(motorMode2) == HIGH)
+    {
+      modeS += 2;
+      }
+  switch (modeS)
   {
     case 0: Forward(Spd, Duration); return ('F');
     case 1: Turn_Left(90); return ('L');
     case 2: Turn_Right(90); return ('R');
     case 3: Backward(Spd, Duration); return ('B');
-    default: Forward(0, Duration);
+    default: Stop();
   }
 }
 
 int getSerial() {
+  String inString = "";
   while (Serial.available()) {
-    int inChar = Serial.read();
+    char inChar = Serial.read();
     if (isDigit(inChar)) {
-      inString += (char)inChar;
+      inString += inChar;
     }
     if (inChar == '\n') {
-      inString = "";
       return(inString.toInt());
     }
-  } }
+  } 
+ }
 
   void loop() {
+    int spd;
     spd = getSerial();
     SetSpeed(spd);
     char a;
     a = read_mode();
-    Serial.print(read_mode());
+    Serial.print(a);
+    Serial.print(spd);
     delay(1000);
   }
