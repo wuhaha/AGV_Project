@@ -11,8 +11,8 @@ const int motorRS = 11;
 const int motorMode1 = 7;
 const int motorMode2 = 8;
 
-int Spd = 125;
-int Duration = 10000;
+int Spd = 25;
+int Duration = 1000;
 
 
 void setup() {
@@ -57,7 +57,6 @@ void Forward(int spd, int t) {
   Serial.print(spd);
   SetSpeed(spd);
   delay(t);
-  Serial.print('a');
 }
 
 void Backward(int spd, int t) {
@@ -68,7 +67,6 @@ void Backward(int spd, int t) {
   SetSpeed(spd);
   Serial.print(spd);
   delay(t);
-  Serial.print('a');
 }
 
 void Stop() {
